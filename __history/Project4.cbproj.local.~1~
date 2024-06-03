@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+  <Transactions>
+    <Transaction>2023/09/24 18:06:12.368,=C:\Users\PC\Documents\Embarcadero\Studio\Projects\Project4PCH1.h</Transaction>
+    <Transaction>2023/09/24 18:06:12.375,=C:\Users\PC\Documents\Embarcadero\Studio\Projects\File1.cpp</Transaction>
+    <Transaction>2023/09/24 18:06:55.210,C:\Users\PC\Desktop\Universidad\ED1 2-2023\Project4PCH1.h=C:\Users\PC\Documents\Embarcadero\Studio\Projects\Project4PCH1.h</Transaction>
+    <Transaction>2023/09/24 18:06:55.224,C:\Users\PC\Desktop\Universidad\ED1 2-2023\File1.cpp=C:\Users\PC\Documents\Embarcadero\Studio\Projects\File1.cpp</Transaction>
+    <Transaction>2023/09/24 18:06:55.230,C:\Users\PC\Desktop\Universidad\ED1 2-2023\Project4.cbproj=C:\Users\PC\Documents\Embarcadero\Studio\Projects\Project4.cbproj</Transaction>
+    <Transaction>2023/09/24 18:14:21.603,=C:\Users\PC\Desktop\Universidad\ED1 2-2023\Unit1.cpp</Transaction>
+    <Transaction>2023/09/24 18:14:45.115,C:\Users\PC\Desktop\Universidad\ED1 2-2023\Clases\Unit1.h=C:\Users\PC\Desktop\Universidad\ED1 2-2023\Unit1.h</Transaction>
+    <Transaction>2023/09/24 18:14:45.115,C:\Users\PC\Desktop\Universidad\ED1 2-2023\Clases\Unit1.cpp=C:\Users\PC\Desktop\Universidad\ED1 2-2023\Unit1.cpp</Transaction>
+    <Transaction>2023/09/24 18:14:58.548,C:\Users\PC\Desktop\Universidad\ED1 2-2023\Clases\CSMemoria.cpp=C:\Users\PC\Desktop\Universidad\ED1 2-2023\Clases\Unit1.cpp</Transaction>
+    <Transaction>2023/09/24 18:14:58.548,C:\Users\PC\Desktop\Universidad\ED1 2-2023\Clases\CSMemoria.h=C:\Users\PC\Desktop\Universidad\ED1 2-2023\Clases\Unit1.h</Transaction>
+  </Transactions>
+</BorlandProject>

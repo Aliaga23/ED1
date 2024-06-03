@@ -1,0 +1,206 @@
+//---------------------------------------------------------------------------
+
+#pragma hdrstop
+
+#include "Conjunto_Lis.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+
+ConjuntoListaP::ConjuntoListaP()
+{
+	lista = new ListaP();
+}
+
+bool ConjuntoListaP::vacio()
+{
+	return lista->vacia();
+}
+
+int ConjuntoListaP::cardinal()
+{
+	return lista->longitud();
+}
+
+int ConjuntoListaP::ordinal(int e)
+{
+	int c = 0;
+	NodoL* aux = lista->primero();
+	while (aux != NULL) {
+		c++; // empieza en 1
+		if (lista->recupera(aux) == e) {
+			return c;
+        }
+        aux = lista->siguiente(aux);
+    }
+    return -1;
+}
+
+void ConjuntoListaP::inserta(int e)
+{
+	if (!pertenece(e)) {
+        lista->inserta(lista->primero(), e);
+    }
+}
+
+void ConjuntoListaP::insertaExamen(int e)
+{
+    NodoL* pertenece = lista->localiza(e);
+    if (pertenece == NULL) { // significa que e no está en la lista
+        lista->inserta(lista->primero(), e);
+    } else
+        cout << "ELEMENTO YA PERTENECE\n";
+}
+
+void ConjuntoListaP::insertaExamen1(int e)
+{
+    NodoL* aux = lista->primero();
+    bool pertenece = false;
+    while (aux != NULL) {
+        if (aux->elemento == e) {
+            pertenece = true;
+            break;
+        } else
+            aux = aux->sig;
+	}
+    if (pertenece == false) {
+        lista->inserta(lista->primero(), e);
+    } else
+        cout << "ELEMENTO YA PERTENECE\n";
+}
+
+void ConjuntoListaP::suprime(int e)
+{
+    if (pertenece(e)) {
+        NodoL* nodo = lista->localiza(e);
+        lista->suprime(nodo);
+	}
+}
+
+bool ConjuntoListaP::pertenece(int e)
+{
+    NodoL* existe = lista->localiza(e);
+    if (existe == NULL)
+        return false;
+    else
+        return true;
+}
+
+int ConjuntoListaP::muestrea()
+{
+    if (!vacio()) {
+		int lug = (rand() % cardinal()) + 1;
+		NodoL* dir = lista->primero();
+		int cont = 0;
+		for (int i = 1; i <= cardinal(); i++) {
+			cont++;
+			if (cont == lug)
+				return lista->recupera(dir);
+			dir = lista->siguiente(dir);
+		}
+	}
+}
+
+int ConjuntoListaP::elemento(int pos)
+{
+    int c = 0;
+    NodoL* aux = lista->primero();
+    while (aux != NULL) {
+        if (c == pos) {
+            return lista->recupera(aux);
+        }
+        c++;
+		aux = lista->siguiente(aux);
+    }
+    return 0;
+}
+
+void ConjuntoListaP::reiniciar()
+{
+    while (vacio() == false) {
+        int r = muestrea();
+        suprime(r);
+    }
+}
+
+string ConjuntoListaP::toStr()
+{
+	// return lista->toStr();
+	string s = "{";
+	NodoL* p = lista->primero();
+	while (p != NULL) {
+		int ele = lista->recupera(p);
+		s += to_string(ele);
+		if (p != lista->fin())
+			s += ",";
+		p = lista->siguiente(p);
+	}
+	return s + "}";
+}
+/*string ConjuntoListaPtr::toStr() {
+	// return lista->toStr();
+	string r = "{";
+	for (int i = 0; i < cardinal(); i++) {
+		r += to_string(elemento(i));
+		if (i < cardinal() - 1) {
+			r += ",";
+		}
+	}
+	r += "}";
+	return r;
+}*/
+
+void ConjuntoListaP::unir(ConjuntoListaP* b, ConjuntoListaP* c)
+{
+    c->reiniciar();
+    ConjuntoListaP* aux = new ConjuntoListaP();
+    ConjuntoListaP* a = this;
+    // Para insertar a en c
+    while (a->vacio() == false) {
+        int r = a->muestrea();
+		c->inserta(r);
+        a->suprime(r);
+        aux->inserta(r);
+    }
+    // Para recuperar los datos de a
+    while (aux->vacio() == false) {
+        int r = aux->muestrea();
+        aux->suprime(r);
+        a->inserta(r);
+    }
+    // Para insertar b en c
+    while (b->vacio() == false) {
+		int r = b->muestrea();
+        c->inserta(r);
+        b->suprime(r);
+        aux->inserta(r);
+    }
+    // Para recuperar los datos de b
+    while (aux->vacio() == false) {
+        int r = aux->muestrea();
+        aux->suprime(r);
+        b->inserta(r);
+    }
+}
+
+void ConjuntoListaP::intersectar(ConjuntoListaP* b, ConjuntoListaP* c)
+{
+    c->reiniciar();
+    ConjuntoListaP* a = this;
+	ConjuntoListaP* aux = new ConjuntoListaP();
+    // Inserto si el elemento pertenece a A y a B
+    while (a->vacio() == false) {
+		int r = a->muestrea();
+		if (a->pertenece(r) && b->pertenece(r)) {
+            c->inserta(r);
+        }
+		a->suprime(r);
+        aux->inserta(r);
+    }
+    // Recupero los elementos de a
+    while (aux->vacio() == false) {
+        int r = aux->muestrea();
+        aux->suprime(r);
+        a->inserta(r);
+    }
+}
+

@@ -1,0 +1,49 @@
+﻿//---------------------------------------------------------------------------
+
+#ifndef Poli_PunH
+#define Poli_PunH
+//---------------------------------------------------------------------------
+#include <iostream>
+#include <string>
+#include <math.h>
+
+using namespace std;
+
+struct NodoP
+{
+    int coef, exp;
+    NodoP* sig;
+};
+
+class PoliP
+{
+  private:
+    NodoP* ptr_poli;
+    int nt;
+
+    NodoP* buscar_exponente(int exp);
+    NodoP* buscar_termino_n(int i);
+    //	NodoP* anterior(NodoP* dir);
+  public:
+    PoliP();
+    bool es_cero();
+    int grado();
+    int coeficiente(int exp);
+    void asignar_coeficiente(int coef, int exp);
+    void poner_termino(int coef, int exp);
+    int numero_terminos();
+    int exponente(int nro);
+    float evalua(float x);
+    void sumar(PoliP* p1, PoliP* p2, PoliP*&pr);
+    void restar(PoliP* p1, PoliP* p2, PoliP*&pr);
+    void multiplicar(PoliP* p1, PoliP* p2, PoliP*&pr);
+    float area(float a, float b);
+    void derivar();
+	string to_str();
+	void mostrar_integral();
+	PoliP* integral();
+	double area(int a, int b) ;
+};
+
+#endif
+

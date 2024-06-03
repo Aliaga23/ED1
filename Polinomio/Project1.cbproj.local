@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2023/04/17 22:48:34.000.321,=C:\Users\ferna\Documents\Embarcadero\Studio\Projects\Project1PCH1.h</Transaction>
+    <Transaction>2023/04/17 22:48:35.000.116,=C:\Users\ferna\Documents\Embarcadero\Studio\Projects\File2.cpp</Transaction>
+    <Transaction>2023/04/17 22:49:02.000.913,C:\Users\ferna\Documents\Embarcadero\Studio\Projects\Polinomio\File2.cpp=C:\Users\ferna\Documents\Embarcadero\Studio\Projects\File2.cpp</Transaction>
+    <Transaction>2023/04/17 22:49:12.000.245,C:\Users\ferna\Documents\Embarcadero\Studio\Projects\Polinomio\Project1PCH1.h=C:\Users\ferna\Documents\Embarcadero\Studio\Projects\Project1PCH1.h</Transaction>
+    <Transaction>2023/04/17 22:49:14.000.869,C:\Users\ferna\Documents\Embarcadero\Studio\Projects\Polinomio\Project1.cbproj=C:\Users\ferna\Documents\Embarcadero\Studio\Projects\Project1.cbproj</Transaction>
+    <Transaction>2023/04/17 22:49:40.000.269,=C:\Users\ferna\Documents\Embarcadero\Studio\Projects\Polinomio\Unit1.cpp</Transaction>
+    <Transaction>2023/04/17 22:49:56.000.468,C:\Users\ferna\Documents\Embarcadero\Studio\Projects\Polinomio\UCPolinomio.cpp=C:\Users\ferna\Documents\Embarcadero\Studio\Projects\Polinomio\Unit1.cpp</Transaction>
+    <Transaction>2023/04/17 22:49:56.000.468,C:\Users\ferna\Documents\Embarcadero\Studio\Projects\Polinomio\UCPolinomio.h=C:\Users\ferna\Documents\Embarcadero\Studio\Projects\Polinomio\Unit1.h</Transaction>
+    <Transaction>2023/04/17 22:51:23.000.412,C:\Users\ferna\Documents\Embarcadero\Studio\Projects\Polinomio\Main.cpp=C:\Users\ferna\Documents\Embarcadero\Studio\Projects\Polinomio\File2.cpp</Transaction>
+  </Transactions>
+</BorlandProject>

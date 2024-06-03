@@ -1,0 +1,89 @@
+//---------------------------------------------------------------------------
+
+#pragma hdrstop
+
+#include "CSMemoria.h"
+
+
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+
+CsMemoria::CsMemoria()
+{
+    mem = new NodoMem[MAX];
+    for (int i = 0; i < MAX; i++) {
+        mem[i].link = i + 1;
+    }
+    mem[MAX - 1].link = -1;
+	this->libre = 0;
+}
+int CsMemoria::numero_ids(string id)
+{
+    if (id.length() == 0)
+        return 0;
+    int cont = 0;
+    for (int i = 0; i < id.length(); i++) {
+        if (id[i] == ',') {
+            cont++;
+        }
+    }
+    return cont + 1;
+}
+int CsMemoria::new_espacio(string cadena)
+{
+	int num = numero_ids(cadena);
+	if (num <= espacio_disponible()) {
+		int d = this->libre;
+		int dir = d;
+		int aux;
+		while (cadena.length() > 0) {
+			int pos = cadena.find_first_of(",");
+			if (pos == -1) {
+				pos = cadena.length();
+				aux = d;
+			}
+			string id = cadena.substr(0, pos);
+			mem[d].id = id;
+			d = mem[d].link;
+			cadena.erase(0, pos + 1);
+		}
+		this->libre = mem[aux].link;
+		mem[aux].link = -1;
+		return dir;
+	}
+	else {
+		cout << "ERROR: ESPACIOS INSUFICIENTES\n";
+		return NULO;
+	}
+}
+void CsMemoria::delete_espacio(int dir)
+{
+
+
+}
+void CsMemoria::poner_dato(int dir, string cadena_id, int valor)
+{
+
+
+}
+int CsMemoria::obtener_dato(int dir, int lugar)
+{
+
+
+}
+int CsMemoria::espacio_disponible()
+{
+
+
+}
+int CsMemoria::espacio_ocupado()
+{
+
+
+}
+bool CsMemoria::dir_libre(int dir)
+{
+
+}
+
+

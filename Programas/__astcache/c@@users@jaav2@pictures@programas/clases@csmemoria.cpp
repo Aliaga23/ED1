@@ -1,0 +1,171 @@
+﻿//---------------------------------------------------------------------------
+
+#pragma hdrstop
+
+#include "CSMemoria.h"
+
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#include <iomanip>
+
+CsMemoria::CsMemoria()
+{
+    mem = new NodoMem[MAX];
+    for (int i = 0; i < MAX; i++) {
+        mem[i].link = i + 1;
+    }
+    mem[MAX - 1].link = -1;
+    this->libre = 0;
+}
+int CsMemoria::numero_ids(string id)
+{
+    if (id.length() == 0)
+        return 0;
+    int cont = 0;
+    for (int i = 0; i < id.length(); i++) {
+        if (id[i] == ',') {
+            cont++;
+        }
+    }
+    return cont + 1;
+}
+int CsMemoria::new_espacio(string cadena)
+{
+    int num = numero_ids(cadena);
+    if (num <= espacio_disponible()) {
+        int d = this->libre;
+        int dir = d;
+        int aux;
+        while (cadena.length() > 0) {
+            int pos = cadena.find_first_of(",");
+            if (pos == -1) {
+                pos = cadena.length();
+                aux = d;
+            }
+            string id = cadena.substr(0, pos);
+            mem[d].id = id;
+            d = mem[d].link;
+            cadena.erase(0, pos + 1);
+        }
+        this->libre = mem[aux].link;
+        mem[aux].link = -1;
+        return dir;
+    } else {
+        cout << "ERROR: ESPACIOS INSUFICIENTES\n";
+        return NULO;
+    }
+}
+void CsMemoria::delete_espacio(int dir)
+{
+    int x = dir;
+    while (mem[x].link != -1)
+        x = mem[x].link;
+    mem[x].link = libre;
+    libre = dir;
+}
+void CsMemoria::poner_dato(int dir, string cadena_id, int valor)
+{
+    int z = dir;
+    cadena_id = cadena_id.substr(2, cadena_id.length() - 2);
+
+    while (z != NULO) {
+        if (mem[z].id == cadena_id) {
+            mem[z].dato = valor;
+            break;
+        }
+        z = mem[z].link;
+    }
+}
+int CsMemoria::obtener_dato(int dir, string cadena_id)
+{
+    int z = dir;
+    cadena_id = cadena_id.substr(2, cadena_id.length() - 2);
+    // Elimina la flecha
+    while (z != NULO) {
+        if (mem[z].id == cadena_id)
+            return mem[z].dato;
+        z = mem[z].link;
+    }
+}
+int CsMemoria::espacio_disponible()
+{
+    int x = libre;
+    int c = 0;
+    while (x != -1) {
+        c++;
+        x = mem[x].link;
+    }
+    return c;
+}
+
+int CsMemoria::espacio_ocupado()
+{
+    int c = MAX - espacio_disponible();
+    return c;
+}
+
+bool CsMemoria::dir_libre(int dir)
+{
+    int x = libre;
+    bool c = false;
+    while (x != -1 && c == false) {
+        if (x == dir)
+            c = true;
+        x = mem[x].link;
+    }
+    return c;
+}
+void CsMemoria::mostrar()
+{
+	cout << "+";
+	for (int i = 2; i <= 3 + 4 + 8 + 3 + 5; i = i + 1) {
+		cout << "-";
+	};
+	cout << "+"
+		 << "\n";
+	cout << "|DIR|"
+		 << "DATO|"
+		 << "---ID---|"
+		 << "LINK|\n";
+	for (int i = 0; i < MAX; i = i + 1) {
+		cout << "|" << setw(3) << i << "|" << setw(4) << mem[i].dato << "|"
+			 << setw(8) << mem[i].id << "|" << setw(4) << mem[i].link << "|\n";
+	};
+	cout << "+";
+	for (int i = 2; i <= 2 + 4 + 8 + 4 + 5; i = i + 1) {
+		cout << "-";
+	};
+	cout << "+\n";
+	cout << "LIBRE:" << libre << "\n";
+	//cout<<"ESPACIO DISPONIBLE:"<<Espacio_disponible()<<"\n";
+	//	cout<<"ESPACIO OCUPADO:"<<Espacio_ocupado()<<"\n";
+}
+
+//void CsMemoria::mostrar() {
+//	cout << "+";
+//	for (int i = 2; i <= 3 + 4 + 8 + 3 + 5 + 6; i = i + 1) {
+//		cout << "-";
+//	};
+//	cout << "+" << "\n";
+//	cout << "|EST|" << "DIR|" << "DATO|" << "---ID---|" << "LINK|\n";
+//	for (int i = 0; i < MAX; i = i + 1) {
+//		char estado;
+//		if (dir_libre(i) == true) {
+//			estado = '0';
+//		} else {
+//			estado = '1';
+//		}
+//        cout << "|" << setw(3) << estado << "|" << setw(3) << i << "|" << setw(4) <<
+//			mem[i].dato << "|" << setw(8) << mem[i].id <<
+//			"|" << setw(4) << mem[i].link << "|\n";
+//	};
+//    cout << "+";
+//	for (int i = 2; i <= 2 + 4 + 8 + 4 + 5 + 6; i = i + 1) {
+//		cout << "-";
+//	};
+//    cout << "+\n";
+//	cout << "LIBRE:" << libre << "\n";
+//	//cout << "ESPACIO DISPONIBLE:" << espacio_disponible() << "\n";
+//	//cout << "ESPACIO OCUPADO:" << espacio_ocupado() << "\n";
+//}
+

@@ -1,0 +1,35 @@
+//---------------------------------------------------------------------------
+
+#ifndef Conjunto_LisH
+#define Conjunto_LisH
+//---------------------------------------------------------------------------
+#include <iostream>
+#include <string>
+#include "Listas.h"
+
+using namespace std;
+
+class ConjuntoListaP {
+private:
+	ListaP *lista;
+
+public:
+	ConjuntoListaP();
+	bool vacio();
+	int cardinal();
+	int ordinal(int e);
+	void inserta(int e);
+	void insertaExamen(int e);
+	void insertaExamen1(int e);
+	void suprime(int e);
+	bool pertenece(int e);
+	int muestrea();
+	int elemento(int pos);
+	void reiniciar();
+	string toStr();
+	void unir(ConjuntoListaP *b, ConjuntoListaP *c);
+	// ConjuntoListaPtr* unir(ConjuntoListaPtr* B);
+	void intersectar(ConjuntoListaP *b, ConjuntoListaP *c);
+
+};
+#endif

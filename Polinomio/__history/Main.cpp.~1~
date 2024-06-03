@@ -1,0 +1,48 @@
+#include <iostream>
+#include "UCPolinomio.h"
+
+using namespace std;
+bool SonOpuestos(keorCpolinomio* A, keorCpolinomio* B);
+
+int main() {
+	keorCpolinomio* a = new keorCpolinomio();
+	keorCpolinomio* b = new keorCpolinomio();
+
+	a->poner_termino(2, 2);
+	b->poner_termino(5, 2);
+	b->poner_termino(-3, 7);
+	if (SonOpuestos(a,b))
+		cout << "Son opuestos" << endl;
+	else
+		cout << "No son opuestos" << endl;
+	return 0;
+}
+
+bool SonOpuestos(keorCpolinomio* A, keorCpolinomio* B){
+     if (A->numero_terminos() == B->numero_terminos())
+    {
+        int contr = 0;
+        for (int i = 1; i <=A->numero_terminos(); i++) {
+            int exp = A->exponente(i);
+            int coef = A->coeficiente(exp);
+            int cont = 0;
+            int expB = B->exponente(i);
+            int coefB = B->coeficiente(expB);
+                if ((expB == exp) && (-coefB == coef))
+                {
+                    contr++;
+                }
+            if (contr == 0)
+            {
+                return false;
+            }
+        }
+        if (contr == A->numero_terminos())
+        {
+            return true;
+        }
+    }else{
+        return false;
+    }
+}
+

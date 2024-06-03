@@ -1,0 +1,118 @@
+//  MatrizV matriz;
+
+	// Dimensiona la matriz con 4 filas y 4 columnas
+	//matriz.dimensionar(4, 4);
+
+	// Ingresa algunos datos en la matriz
+//    matriz.poner(1, 1, 0);
+//	matriz.poner(1, 2, 0);
+//	matriz.poner(1, 3, 0);
+//	matriz.poner(1, 4, 11);
+//	matriz.poner(3, 1, 0);
+//	matriz.poner(3, 2, 50);
+//	matriz.poner(3, 3, 85);
+//	matriz.poner(3, 4, 2581);
+//
+//	matriz.poner(4, 1, 7);
+//	matriz.poner(4, 2, 0);
+//	//matriz.poner(4, 3, 2);
+//	matriz.poner(4, 4, 0);
+//	matriz.definir_valor_repetido(59);
+//	string repre;
+//	repre=matriz.to_str();
+//	cout<<repre;
+//---------------------------------------------
+// CsMemoria* memoria;
+//	MatrizSM* matriz;
+//	memoria = new CsMemoria();
+//	matriz = new MatrizSM(memoria);
+////	// Definir el valor repetido
+//	matriz->definir_valor_repetido(15);
+////
+////	// Dimensionar la matriz 3x3
+//	matriz->dimensionar(4, 3);
+////
+////	// Llenar la matriz con datos
+//	matriz->poner(2, 2, 500);
+////	//matriz->poner(1, 2, 1500);
+////
+////
+//	cout << "Matriz:\n" << matriz->to_str() << endl;
+//	matriz->transponer();
+//	//matriz->definir_valor_repetido(15);
+////	// Mostrar la matriz
+//	cout << "Matriz:\n" << matriz->to_str() << endl;
+//
+//
+//	//cout << "Matriz:\n" << matriz->to_str() << endl;
+//	// Mostrar la memoria
+//   //	memoria->mostrar();
+//MatrizPC matriz;
+//MatrizPC* matriz;
+//matriz = new MatrizPC();
+//matriz->definir_valor_repetido(15);
+//matriz->dimensionar(4, 3);
+//
+//			 cout << "Matriz:\n" << matriz->to_str() << endl;
+//			 matriz->transponer();
+//			 matriz->definir_valor_repetido(15);
+//			 matriz->poner(1, 2, 1500);
+//			  cout << "Matriz:\n" << matriz->to_str() << endl;
+
+
+
+void transponerMatriz(MatrizSM &matriz) {
+    int temp_df = matriz.dimension_columna();  // Intercambia las dimensiones
+    int temp_dc = matriz.dimension_fila();
+    int temp_ptrMatD = NULO;
+    
+    // Recorre la matriz actual
+    for (int i = 1; i <= matriz.dimension_fila(); i++) {
+        for (int j = 1; j <= matriz.dimension_columna(); j++) {
+            int valor = matriz.elemento(i, j);
+            
+            if (valor != matriz.repe) {
+                // Encuentra la posición en la matriz transpuesta
+                int nuevo = matriz.existe(j, i);
+                
+                if (nuevo == NULO) {
+                    nuevo = matriz.mem->new_espacio(matriz.dataMC);
+                    matriz.mem->poner_dato(nuevo, matriz.filMC, j);
+                    matriz.mem->poner_dato(nuevo, matriz.colMC, i);
+                }
+                
+                matriz.mem->poner_dato(nuevo, matriz.datoMC, valor);
+                matriz.mem->poner_dato(nuevo, matriz.sigMC, temp_ptrMatD);
+                temp_ptrMatD = nuevo;
+            }
+        }
+    }
+    
+    // Copia los valores actualizados y las dimensiones
+    matriz.dimensionar(temp_df, temp_dc);
+    matriz.ptrMatD = temp_ptrMatD;
+}
+
+int main() {
+    CsMemoria* memoria = new CsMemoria();
+    MatrizSM matriz(memoria);
+    
+    // Definir el valor repetido
+    matriz.definir_valor_repetido(15);
+    
+    // Dimensionar la matriz 4x3
+    matriz.dimensionar(4, 3);
+    
+    // Llenar la matriz con datos
+    matriz.poner(2, 2, 500);
+    
+    cout << "Matriz original:\n" << matriz.to_str() << endl;
+    
+    // Llamar al procedimiento para transponer
+    transponerMatriz(*matriz);
+    
+    // Mostrar la matriz transpuesta
+    cout << "Matriz transpuesta:\n" << matriz.to_str() << endl;
+    
+    return 0;
+}

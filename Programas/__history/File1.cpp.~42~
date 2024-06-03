@@ -1,0 +1,637 @@
+#include <iostream>
+#include <string>
+#include "iomanip"
+#include "CsMemoria.h"
+#include "Listas.h"
+#include "Lista_SM.h"
+#include "UListaV.h"
+#include "LisPoli_Pun.h"
+#include "LisPoli_Vec_Mem.h"
+#include "Poli_Vec.h"
+#include "Poli_Pun.h"
+#include "Poli_SM.h"
+#include "Conjunto_Lis.h"
+#include "Conjunto_Pun.h"
+#include "Conjunto_Vec.h"
+#include "Conjunto_SM.h"
+#include "Menu_Conjunto.h"
+#include "ListasPtr.h"
+#include "MatrizVec.h"
+#include "Matriz_Puntero.h"
+#include "Matriz_SM.h"
+#include "PoliJAAV.h"
+#include "Parcial1.h"
+
+using namespace std;
+
+void menuPoliSM();
+void menuPoliVec();
+void menuListas();
+void menuPoliPun();
+void menuLS();
+float area(PoliP fx, float a, float b);
+void punto_minimo(PoliP* fx, float a, float b);
+void intersectarConjuntos(ConjuntoPtr* a, ConjuntoPtr* b, ConjuntoPtr &c);
+void complementoInterseccion(ConjuntoPtr* a, ConjuntoPtr* b, ConjuntoPtr &c);
+void menuS();
+void menuPruebaParcial();
+bool esSimetrica(MatrizSM &matriz);
+
+int main()
+{
+PoliLP2 polinomio;
+polinomio.poner_termino(4, 7);
+polinomio.poner_termino(5, 1);
+polinomio.poner_termino(9, 3);
+cout << "Polinomio k: " << polinomio.to_str() << endl;
+//  polinomio.poner_termino(6, 14);
+cout << "Polinomio k: " << polinomio.k_to_str() << endl;
+
+ polinomio.derivar() ;
+cout << "Polinomio k: " << polinomio.to_str() << endl;
+
+	//menuPoliPun();
+	menuPruebaParcial();
+    system("pause");
+    return 0;
+}
+void menuPruebaParcial()
+{
+    PoliJAAV* p;
+    int opcion;
+    do {
+        cout << "1.Crear \n";
+        cout << "2.Poner Termino\n";
+        cout << "3.Grado\n";
+        cout << "4.Derivada\n";
+        cout << "5.Mostrar Polinomio\n";
+        cout << "6.Mostrar Atributos\n";
+        cout << "7.Integral\n";
+        cout << "8.Area\n";
+        cout << "9.Punto minimo\n";
+        cout << "10.Punto maximo\n";
+        cout << "11.Salir\n";
+
+        cout << "Opcion: ";
+        cin >> opcion;
+        switch (opcion) {
+            case 1: {
+                p = new PoliJAAV();
+                p->generar();
+            } break;
+            case 2: {
+                int co, ex;
+                cout << "Ingrese coeficiente" << endl;
+                cin >> co;
+                cout << "Ingrese exponente" << endl;
+                cin >> ex;
+                p->poner_termino(co, ex);
+
+            } break;
+            case 3: {
+                cout << p->grado() << endl;
+            } break;
+            case 4: {
+                p->derivar();
+                cout << p->to_str2() << endl;
+            } break;
+            case 5: {
+                cout << p->to_str2() << endl;
+            } break;
+            case 6: {
+                p->to_str();
+            } break;
+            case 7: {
+                cout << "Integral del polinomio: ";
+                p->mostrar_integral();
+            } break;
+            case 8: {
+                int a;
+                int b;
+                cout << "a:" << endl;
+                cin >> a;
+
+                cout << "b:" << endl;
+                cin >> b;
+                double area = p->area2(a, b);
+
+                cout << "Área bajo la curva entre x = " << a << " y x = " << b
+                     << ": " << area << endl;
+
+            } break;
+            case 9: {
+                double a, b;
+                cout << "Ingrese a" << endl;
+                cin >> a;
+                cout << "Ingrese b" << endl;
+                cin >> b;
+                p->punto_minimo(a, b);
+            } break;
+            case 10: {
+                double a, b;
+                cout << "Ingrese a" << endl;
+                cin >> a;
+                cout << "Ingrese b" << endl;
+                cin >> b;
+                p->punto_maximo(a, b);
+            } break;
+        }
+        system("pause");
+        system("cls");
+    } while (opcion != 11);
+}
+bool esSimetrica(MatrizSM &matriz)
+{
+    int df = matriz.dimension_fila();
+    int dc = matriz.dimension_columna();
+
+    if (df != dc) {
+        // Si el número de filas no es igual al número de columnas, no puede ser simétrica.
+        return false;
+    }
+
+    // Compara la matriz original con su traspuesta
+    for (int i = 1; i <= df; i++) {
+        for (int j = 1; j <= dc; j++) {
+            if (matriz.elemento(i, j) != matriz.elemento(j, i)) {
+                // Si se encuentra al menos un elemento diferente, la matriz no es simétrica.
+                return false;
+            }
+        }
+    }
+
+    // Si no se encontraron elementos diferentes, la matriz es simétrica.
+    return true;
+}
+bool sonOpuestos(PoliP* a, PoliP* b)
+{
+    PoliP* suma = new PoliP();
+    for (int i = 1; i <= a->numero_terminos(); i++) {
+        int exp = a->exponente(i);
+        int coef = a->coeficiente(exp);
+        suma->poner_termino(coef, exp);
+    }
+    for (int i = 1; i <= b->numero_terminos(); i++) {
+        int exp = b->exponente(i);
+        int coef = b->coeficiente(exp);
+        suma->poner_termino(coef, exp);
+    }
+    return suma->es_cero();
+}
+
+bool sonIguales(PoliP* a, PoliP* b)
+{
+    PoliP* suma = new PoliP();
+    suma->sumar(a, b, suma);
+    return suma->es_cero();
+    for (int i = 1; i <= a->numero_terminos(); i++) {
+        int exp = a->exponente(i);
+        int coef = a->coeficiente(exp);
+        suma->poner_termino(coef, exp);
+    }
+    for (int i = 1; i <= b->numero_terminos(); i++) {
+        int exp = b->exponente(i);
+        int coef = b->coeficiente(exp);
+        suma->poner_termino(-coef, exp);
+    }
+    return suma->es_cero();
+}
+
+void menuS()
+{
+    ListaS* list;
+    CsMemoria* mem;
+    int opcion;
+    do {
+        cout << "1.Crear Memoria\n";
+        cout << "2.Pedir espacio\n";
+        cout << "3.Crear Lista\n";
+        cout << "4.Mostrar memoria\n";
+        cout << "5.Mostrar lista\n";
+        cout << "6.INSERTAR DIR PRIMERO \n L.INSERTAR(L->PRIMERO,DATO)\n";
+        cout << "7.INSERTAR DIR FIN\n";
+        cout << "8.INSERTAR SIGUIENTE PRIMERO\n L.INSERTAR(L,SIGUIENTE,DATO)\n";
+        cout << "9.INSERTAR ANTERIOR FIN\n";
+        cout << "10.SUPRIMIR SIGUIENTE PRIMERO\n";
+        cout << "11.Salir\n";
+        cout << "Opcion: ";
+        cin >> opcion;
+        switch (opcion) {
+            case 1: {
+                mem = new CsMemoria();
+                cout << "Memoria Creada" << endl;
+            } break;
+            case 2: {
+                string ids;
+                cin.ignore();
+                cout << "IDS a guardar: ";
+                getline(cin, ids);
+                mem->new_espacio(ids);
+            } break;
+            case 3: {
+                list = new ListaS(mem);
+                cout << "Lista Creada" << endl;
+            } break;
+            case 4: {
+                cout << "La Memoria\n" << endl;
+                mem->mostrar();
+            } break;
+            case 5: {
+                cout << "La Lista\n" << endl;
+
+                cout << list->to_str() << endl;
+            } break;
+            case 6: {
+                int e;
+                cout << "Dato: ";
+                cin >> e;
+                list->inserta_primero(e);
+                cout << list->to_str() << endl;
+
+            } break;
+            case 7: {
+                int e;
+                cout << "Dato: ";
+                cin >> e;
+                list->inserta_ultimo(e);
+                cout << list->to_str() << endl;
+
+            } break;
+            case 8: {
+                int e;
+                cout << "Dato: ";
+                cin >> e;
+                //insertar(direccion,elemento);
+                list->inserta(list->siguiente(list->primero()), e);
+                cout << list->to_str() << endl;
+            } break;
+            case 9: {
+                int e;
+                cin >> e;
+                list->inserta(list->fin(), e);
+            } break;
+
+            case 10: {
+                list->suprime(list->siguiente(list->primero()));
+            } break;
+        }
+        system("pause");
+        system("cls");
+    } while (opcion != 11);
+}
+void complementoInterseccion(ConjuntoPtr* a, ConjuntoPtr* b, ConjuntoPtr &c)
+{
+    for (int i = 0; i < a->cardinal(); i++) {
+        int eA = a->elemento(i);
+        if (!(a->pertenece(eA) && b->pertenece(eA))) {
+            c.inserta(eA);
+        }
+    }
+    for (int i = 0; i < b->cardinal(); i++) {
+        int eB = b->elemento(i);
+        if (!(a->pertenece(eB) && b->pertenece(eB))) {
+            c.inserta(eB);
+        }
+    }
+}
+void intersectarConjuntos(ConjuntoPtr* a, ConjuntoPtr* b, ConjuntoPtr &c)
+{
+    ConjuntoPtr aux;
+    for (int i = 0; i < a->cardinal(); i++) {
+        int elemA = a->elemento(i);
+        if (a->pertenece(elemA) && b->pertenece(elemA)) {
+            c.inserta(elemA);
+        }
+    }
+    for (int i = 0; i < b->cardinal(); i++) {
+        int elemB = b->elemento(i);
+        if (b->pertenece(elemB) && a->pertenece(elemB)) {
+            c.inserta(elemB);
+        }
+    }
+}
+
+//void IntersectarConjuntos(ConjuntoPtr* a, ConjuntoPtr* b, ConjuntoPtr& c) {
+//	c.reiniciar();
+//	ConjuntoPtr aux;
+//	// Inserto si el elemento pertenece a A y a B
+//	while (!a->vacio()) {
+//		int r = a->muestrea();
+//		if (a->pertenece(r) && b->pertenece(r)) {
+//			c.inserta(r);
+//		}
+//		a->suprime(r);
+//        aux.inserta(r);
+//    }
+//    // Recupero los elementos de A
+//    while (!aux.vacio()) {
+//        int r = aux.muestrea();
+//        aux.suprime(r);
+//		a->inserta(r);
+//	}
+//}
+
+void punto_minimo(PoliP* fx, float a, float b)
+{
+    double minY = fx->evalua(a);
+    double minX = a;
+    double x = a;
+    while (x <= b) {
+        double evalua = fx->evalua(x);
+        if (evalua < minY) {
+            minY = evalua;
+            minX = x;
+        }
+		cout << x << " , " << evalua << endl;
+        x = x + 0.001;
+	}
+    if (fabs(minX) < 1e-6) {
+        cout << "Punto mínimo: (0," << minY << ")" << endl;
+    } else {
+        cout << "Punto mínimo: (" << fixed << setprecision(5) << minX << ","
+             << minY << ")" << endl;
+    }
+}
+
+float area(PoliP fx, float a, float b)
+{
+    float evaluaA = fx.evalua(a);
+    float evaluaB = fx.evalua(b);
+    return abs(evaluaB) + abs(evaluaA);
+    /*
+	 formula de la integral -> abs(evaluaB - evaluaA)
+	 pero asi no saldria el segundo ejemplo
+	 */
+}
+void menuPoliPun()
+{
+    PoliP* fx;
+    int opcion;
+    do {
+        cout << "1.Crear Polinomio\n";
+        cout << "2.Poner Termino\n";
+        cout << "3.Mostrar Polinomio\n";
+        cout << "4.Derivar\n";
+        cout << "5.Evaluar\n";
+        cout << "6. Punto minimo\n";
+        cout << "7.Salir\n";
+        cout << "Opcion: ";
+        cin >> opcion;
+        switch (opcion) {
+            case 1: {
+                fx = new PoliP();
+            } break;
+            case 2: {
+                int coef, exp;
+                cout << "Coef: ";
+                cin >> coef;
+                cout << "Exp: ";
+                cin >> exp;
+                fx->poner_termino(coef, exp);
+            } break;
+            case 3: {
+                cout << fx->to_str() << endl;
+            } break;
+            case 4: {
+                fx->derivar();
+            } break;
+            case 5: {
+                int n;
+                cout << "Ingrese Dato para evaluar" << endl;
+                cin >> n;
+                cout << "Resultado al reemplazar x" << endl;
+                cout << fx->evalua(n) << endl;
+            } break;
+            case 6: {
+                float a;
+                float b;
+                cout << "Ingrese a" << endl;
+                cin >> a;
+                cout << "Ingrese b" << endl;
+                cin >> b;
+                punto_minimo(fx, a, b);
+            } break;
+        }
+        system("pause");
+        system("cls");
+    } while (opcion != 7);
+}
+void menuPoliSM()
+{
+    CsMemoria* mem;
+    PoliS* p;
+    int opcion;
+    do {
+        cout << "1.Crear Memoria\n";
+        cout << "2.Pedir espacio\n";
+        cout << "3.Liberar espacio\n";
+        cout << "4.Crear Polinomio\n";
+        cout << "5.Poner Termino\n";
+        cout << "6.Mostrar Polinomio\n";
+        cout << "7.Derivar\n";
+        cout << "8.Mostrar Memoria\n";
+        cout << "9.Evalua\n";
+        cout << "10.Salir\n";
+        cout << "Opcion: ";
+        cin >> opcion;
+        switch (opcion) {
+            case 1: {
+                mem = new CsMemoria();
+            } break;
+            case 2: {
+                string id;
+                cin.ignore();
+                cout << "IDs: ";
+                getline(cin, id);
+                mem->new_espacio(id);
+            } break;
+            case 3: {
+                int dir;
+                cout << "Direccion a liberar: ";
+                cin >> dir;
+                mem->delete_espacio(dir);
+            } break;
+            case 4: {
+                p = new PoliS(mem);
+            } break;
+            case 5: {
+                int coef, exp;
+                cout << "Coef: ";
+                cin >> coef;
+                cout << "Exp: ";
+                cin >> exp;
+                p->poner_termino(coef, exp);
+            } break;
+            case 6: {
+                cout << p->to_str() << endl;
+            } break;
+            case 7: {
+                //p->mostrar_integral();
+                p->derivar();
+
+                ///derivar tambien
+            } break;
+            case 8: {
+                mem->mostrar();
+            } break;
+            case 9: {
+                int n;
+                cout << "Ingrese Dato para evaluar" << endl;
+                cin >> n;
+                cout << "Resultado al reemplazar x" << endl;
+                cout << p->evalua(n) << endl;
+            } break;
+        }
+        system("pause");
+        system("cls");
+    } while (opcion != 10);
+}
+void menuPoliVec()
+{
+    PoliV* p;
+    int opcion;
+    do {
+        cout << "1.Crear Polinomio\n";
+        cout << "2.Poner Termino\n";
+        cout << "3.Mostrar Polinomio\n";
+        cout << "4.Derivar\n";
+        cout << "5.Evaluar\n";
+        cout << "6.Salir\n";
+        cout << "Opcion: ";
+        cin >> opcion;
+        switch (opcion) {
+            case 1: {
+                p = new PoliV();
+            } break;
+            case 2: {
+                int coef, exp;
+                cout << "Coef: ";
+                cin >> coef;
+                cout << "Exp: ";
+                cin >> exp;
+                p->poner_termino(coef, exp);
+            } break;
+            case 3: {
+                cout << p->to_str() << endl;
+            } break;
+            case 4: {
+                p->derivar();
+            } break;
+            case 5: {
+                int n;
+                cout << "Ingrese Dato para evaluar" << endl;
+                cin >> n;
+                cout << "Resultado al reemplazar x" << endl;
+                cout << p->evalua(n) << endl;
+            } break;
+        }
+        system("pause");
+        system("cls");
+    } while (opcion != 6);
+}
+
+void menuListas()
+{
+    PoliL* p; // PoliLP* p;
+    int opcion;
+    do {
+        cout << "1.Crear Polinomio\n";
+        cout << "2.Poner Termino\n";
+        cout << "3.Mostrar Polinomio\n";
+        cout << "4.Derivar\n";
+        cout << "5.Evaluar\n";
+        cout << "6.Salir\n";
+        cout << "Opcion: ";
+        cin >> opcion;
+        switch (opcion) {
+            case 1: {
+                p = new PoliL(); // p = new PoliLP();
+            } break;
+            case 2: {
+                int coef, exp;
+                cout << "Coef: ";
+                cin >> coef;
+                cout << "Exp: ";
+                cin >> exp;
+                p->poner_termino(coef, exp);
+            } break;
+            case 3: {
+                cout << p->to_str() << endl;
+            } break;
+            case 4: {
+                p->derivar();
+            } break;
+            case 5: {
+                int n;
+                cout << "Ingrese Dato para evaluar" << endl;
+                cin >> n;
+                cout << "Resultado al reemplazar x" << endl;
+                cout << p->evalua(n) << endl;
+            } break;
+        }
+        system("pause");
+        system("cls");
+    } while (opcion != 6);
+}
+
+void menuLS()
+{
+    ListaS* list;
+    CsMemoria* mem;
+    int opcion;
+    do {
+        cout << "1.Crear Memoria\n";
+        cout << "2.Pedir espacio\n";
+        cout << "3.Liberar espacio\n";
+        cout << "4.Crear Lista\n";
+        cout << "5.Insertar inicio\n";
+        cout << "6.Insertar final\n";
+        cout << "7.Mostrar memoria\n";
+        cout << "8.Mostrar lista\n";
+        cout << "9.Salir\n";
+        cout << "Opcion: ";
+        cin >> opcion;
+        switch (opcion) {
+            case 1: {
+                mem = new CsMemoria();
+            } break;
+            case 2: {
+                string ids;
+                cin.ignore();
+                cout << "IDS a guardar: ";
+                getline(cin, ids);
+                mem->new_espacio(ids);
+            } break;
+            case 3: {
+                int dir;
+                cout << "Direccion a liberar\n";
+                cin >> dir;
+                mem->delete_espacio(dir);
+            } break;
+            case 4: {
+                list = new ListaS(mem);
+            } break;
+            case 5: {
+                int e;
+                cout << "Dato: ";
+                cin >> e;
+                list->inserta_primero(e);
+            } break;
+            case 6: {
+                int e;
+                cout << "Dato: ";
+                cin >> e;
+                list->inserta_ultimo(e);
+            } break;
+            case 7: {
+                mem->mostrar();
+            } break;
+            case 8: {
+                cout << list->to_str() << endl;
+            } break;
+        }
+        system("pause");
+        system("cls");
+    } while (opcion != 9);
+}
+
